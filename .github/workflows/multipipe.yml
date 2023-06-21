@@ -1,0 +1,48 @@
+name: Multi-Repo Workflow
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build and test
+        run: |
+          # Add your build and test commands here
+
+      - name: Update repositories
+        run: |
+          # List the repositories you want to update
+          repositories:
+            - username/repository1
+            - username/repository2
+            - username/repository3
+
+          for repo in $repositories; do
+            echo "Updating $repo"
+            cd $repo
+            git pull origin main
+            cd ..
+          done
+
+      - name: Commit and push changes
+        run: |
+          # Commit and push changes to the repositories
+          git config --global user.email "prakashveni@gmail.com"
+          git config --global user.name "prakash"
+
+          for repo in $repositories; do
+            echo "Pushing changes to $repo"
+            cd $repo
+            git add .
+            git commit -m "Update from workflow"
+            git push origin main
+            cd ..
+          done
